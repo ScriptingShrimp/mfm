@@ -2,7 +2,6 @@
 
 import prometheus_client, time, os
 from logging_module import setup_logging
-from flask import Response, Flask
 from prometheus_client.core import CollectorRegistry
 from prometheus_client import Counter, Histogram
 
@@ -18,30 +17,30 @@ graphs['counter'] = Counter('my_counter', 'The total number of requests processe
 graphs['histogram'] = Histogram('my_histogram', 'Histogram for the duration in seconds', buckets=(1, 2, 5, 6, 10, _INF))
 
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
-# create route for ticker metrics
-@app.route('/')
-def index():
-    return 'app is running'
+# # create route for ticker metrics
+# @app.route('/')
+# def index():
+#     return 'app is running'
 
-@app.route('/hello')
-def hello():
-    start = time.time()
-    graphs['counter'].inc()
+# @app.route('/hello')
+# def hello():
+#     start = time.time()
+#     graphs['counter'].inc()
 
-    time.sleep(0.2)
-    end = time.time()
-    graphs['histogram'].observe(end - start)
-    logger.info("aaa")
-    return 'Hello, World!'
+#     time.sleep(0.2)
+#     end = time.time()
+#     graphs['histogram'].observe(end - start)
+#     logger.info("aaa")
+#     return 'Hello, World!'
 
-@app.route('/metrics')
-def metrics():
-    res = []
-    for key, value in graphs.items():
-        res.append(prometheus_client.generate_latest(value))
-    return Response(res, mimetype='text/plain')
+# @app.route('/metrics')
+# def metrics():
+#     res = []
+#     for key, value in graphs.items():
+#         res.append(prometheus_client.generate_latest(value))
+#     return Response(res, mimetype='text/plain')
 
 
 
